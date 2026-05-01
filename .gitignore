@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+serviceAccountKey.json
+backend/serviceAccountKey.json
+
+# Local tooling
+.codex
+
+# Logs and OS files
+*.log
+.DS_Store
