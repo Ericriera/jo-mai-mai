@@ -8,12 +8,10 @@ This is a fun mobile application built with [Expo](https://expo.dev/) and React 
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (LTS)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/) installed globally on your machine:
+- [Node.js](https://nodejs.org/) 20.19+ (LTS)
+- npm
 
-    ```bash
-    npm install -g expo-cli
-    ```
+> Note: this project uses the local Expo CLI workflow (`npx expo ...`).
 
 ### Installation
 
@@ -37,15 +35,24 @@ This is a fun mobile application built with [Expo](https://expo.dev/) and React 
 
 ### Running the App
 
-1. Start the Expo development server:
+1. Start the Expo development server with the local CLI bundled in the project:
 
     ```bash
-    expo start
+    npm run start
     ```
 
 2. Open the Expo Go app on your mobile device (available on [iOS](https://apps.apple.com/app/apple-store/id982107779) and [Android](https://play.google.com/store/apps/details?id=host.exp.exponent)).
 
 3. Scan the QR code generated in your terminal or web browser to run the app on your device.
+
+Useful commands:
+
+```bash
+npm run android
+npm run ios
+npm run web
+npm run doctor
+```
 
 ### Building the App
 
@@ -56,5 +63,3 @@ eas build
 ```
 
 > **Note:** You will need an Expo account and [Expo Application Services (EAS)](https://docs.expo.dev/eas/) to build the app for production.
-
-
