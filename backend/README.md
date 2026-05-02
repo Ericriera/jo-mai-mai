@@ -1,12 +1,37 @@
 # Jo Mai Mai API
-Jo Mai Mai API is an API for the popular game "Never Have I Ever" built with FastAPI.
+Jo Mai Mai API is a FastAPI backend for the popular game "Never Have I Ever".
+
 ## Getting Started
-1. Install dependencies
+
+1. Create and activate a virtual environment.
+
 ```zsh
-pip install -r requirements.txt
+python3 -m venv backend/venv
+source backend/venv/bin/activate
 ```
-2. Start FastAPI process
+
+2. Install dependencies.
+
 ```zsh
-python main.py
+pip install -r backend/requirements.txt
 ```
-3. Open local API docs [http://localhost:8000/docs](http://localhost:8000/docs)
+
+3. Copy the environment file and adjust it if needed.
+
+```zsh
+cp backend/.env.example backend/.env
+```
+
+4. Start the API from the project root.
+
+```zsh
+fastapi dev backend/main.py
+```
+
+If you prefer the Python entrypoint instead of the CLI:
+
+```zsh
+python -m backend.main
+```
+
+5. Open the local API docs at [http://localhost:8000/docs](http://localhost:8000/docs).
