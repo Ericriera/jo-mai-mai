@@ -1,4 +1,4 @@
-def full_suggestion_schema(suggestion) -> dict:
+def full_suggestion_schema(suggestion: dict) -> dict:
     return {
         "id": suggestion["id"],
         "suggestion": suggestion["suggestion"],
@@ -7,7 +7,7 @@ def full_suggestion_schema(suggestion) -> dict:
     }
 
 
-def suggestion_schema(suggestion) -> dict:
+def suggestion_schema(suggestion: dict) -> dict:
     return {
         "id": suggestion["id"],
         "suggestion": suggestion["suggestion"],
@@ -15,5 +15,5 @@ def suggestion_schema(suggestion) -> dict:
     }
 
 
-def suggestions_schema(suggestions) -> list:
+def suggestions_schema(suggestions: list[dict]) -> list[dict]:
     return [suggestion_schema(suggestion) for suggestion in suggestions]

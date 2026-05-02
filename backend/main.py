@@ -1,35 +1,53 @@
-import os
+from __future__ import annotations
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from routers import questions, suggestions
+
+from backend.core.config import get_settings
+from backend.db.repository import DocumentNotFoundError
+from backend.routers import questions, suggestions
 
 
-app = FastAPI()
+def create_app() -> FastAPI:
+    settings = get_settings()
+    app = FastAPI(
+        title=settings.app_name,
+        description=settings.app_description,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_allowed_origins,
+        allow_credentials=settings.cors_allow_credentials,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    @app.exception_handler(DocumentNotFoundError)
+    async def document_not_found_handler(_, exc: DocumentNotFoundError) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": exc.detail})
+
+    @app.get("/health", tags=["health"])
+    async def health_check() -> dict[str, str]:
+        return {"status": "ok"}
+
+    app.include_router(questions.router)
+    app.include_router(suggestions.router)
+
+    return app
 
 
-def _parse_csv_env(name: str, default: str) -> list[str]:
-    value = os.getenv(name, default)
-    return [item.strip() for item in value.split(",") if item.strip()]
+app = create_app()
 
 
-def _parse_bool_env(name: str, default: str = "false") -> bool:
-    return os.getenv(name, default).lower() in {"1", "true", "yes", "on"}
+if __name__ == "__main__":
+    import uvicorn
 
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=_parse_csv_env("CORS_ALLOWED_ORIGINS", "*"),
-    allow_credentials=_parse_bool_env("CORS_ALLOW_CREDENTIALS"),
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-@app.get("/health", tags=["health"])
-async def health_check():
-    return {"status": "ok"}
-
-
-app.include_router(questions.router)
-app.include_router(suggestions.router)
+    settings = get_settings()
+    uvicorn.run(
+        "backend.main:app",
+        host=settings.app_host,
+        port=settings.app_port,
+        reload=settings.app_reload,
+    )

@@ -1,4 +1,4 @@
-def full_question_schema(question) -> dict:
+def full_question_schema(question: dict) -> dict:
     return {
         "id": question["id"],
         "question": question["question"],
@@ -8,7 +8,7 @@ def full_question_schema(question) -> dict:
     }
 
 
-def question_schema(question) -> dict:
+def question_schema(question: dict) -> dict:
     return {
         "id": question["id"],
         "question": question["question"],
@@ -16,5 +16,5 @@ def question_schema(question) -> dict:
     }
 
 
-def questions_schema(questions) -> list:
+def questions_schema(questions: list[dict]) -> list[dict]:
     return [question_schema(question) for question in questions]
