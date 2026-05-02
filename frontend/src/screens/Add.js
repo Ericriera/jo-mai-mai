@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import {
   Button,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { apiUrl } from "../config/api";
 
 export default function Add() {
   const navigation = useNavigation();
@@ -17,6 +18,29 @@ export default function Add() {
     suggestion: "",
     category: "",
   });
+
+  const onSend = useCallback(async () => {
+    try {
+      const response = await fetch(apiUrl("/suggestions/"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          suggestion: newSuggestion.suggestion,
+          category: newSuggestion.category,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error en el envío");
+      }
+
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
+  }, [navigation, newSuggestion.category, newSuggestion.suggestion]);
 
   useLayoutEffect(() => {
     Platform.OS === "ios" &&
@@ -32,35 +56,7 @@ export default function Add() {
           />
         ),
       });
-  }, []);
-
-  const onSend = async () => {
-    try {
-      const response = await fetch(
-        `https://jo-mai-mai-api.onrender.com/suggestions/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: "",
-            suggestion: newSuggestion.suggestion,
-            category: newSuggestion.category,
-            created_at: "",
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error en el envío");
-      }
-
-      navigation.goBack();
-    } catch (error) {
-      console.error("Error sending data:", error);
-    }
-  };
+  }, [navigation, onSend]);
 
   return (
     <LinearGradient colors={["#b1c6f4", "#ffffff"]} style={styles.container}>

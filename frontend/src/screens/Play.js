@@ -2,60 +2,57 @@ import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import NoItemsModal from "../components/NoItemsModal";
+import { apiUrl } from "../config/api";
 
 export default function Play({ route }) {
   const { selection } = route.params;
   const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(null);
-  const [mounted, setMounted] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const category = selection.length === 1 ? selection[0] : "";
-        const response = await fetch(
-          `https://jo-mai-mai-api.onrender.com/questions/?category=${category}`,
-          {
-            method: "GET",
-          }
-        );
+        const query = category
+          ? `?category=${encodeURIComponent(category)}`
+          : "";
+        const response = await fetch(apiUrl(`/questions/${query}`), {
+          method: "GET",
+        });
 
         if (!response.ok) {
           throw new Error("Error en la solicitud");
         }
         const data = await response.json();
         setQuestions(data);
+        setIndex(
+          data.length > 0 ? Math.floor(Math.random() * data.length) : null
+        );
+        setModalVisible(data.length === 0);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchData().then(() => {
-      setMounted(true);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (questions.length > 0) {
-      getRandomIndex();
-    }
-  }, [mounted]);
+    fetchData();
+  }, [selection]);
 
   const getRandomIndex = () => {
-    if (index !== null) {
-      setQuestions((prevQuestions) => {
-        const newQuestions = prevQuestions.filter(
-          (question, key) => key !== index
-        );
-        return newQuestions;
-      });
+    const remainingQuestions =
+      index === null
+        ? questions
+        : questions.filter((_, key) => key !== index);
+
+    if (remainingQuestions.length === 0) {
+      setQuestions([]);
+      setIndex(null);
+      setModalVisible(true);
+      return;
     }
-    if (questions.length - 1 === 0) setModalVisible(true);
-    const seed = new Date().getTime();
-    const random = seed + Math.random();
-    const randomIndex =
-      Math.floor(random * questions.length) % (questions.length - 1);
+
+    const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+    setQuestions(remainingQuestions);
     setIndex(randomIndex);
   };
 
@@ -71,7 +68,8 @@ export default function Play({ route }) {
             height: 200,
           }}
           source={
-            questions[index]?.categories.includes("hot") && selection.includes("hot")
+            questions[index]?.categories.includes("hot") &&
+            selection.includes("hot")
               ? require("../../assets/fire.png")
               : require("../../assets/star.png")
           }
