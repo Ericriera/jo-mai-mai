@@ -2,8 +2,6 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ARG EXPO_PUBLIC_API_URL=/api
-ENV EXPO_PUBLIC_API_URL=${EXPO_PUBLIC_API_URL}
 ENV CI=1
 
 COPY package.json package-lock.json ./
@@ -20,7 +18,11 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/dist ./
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
