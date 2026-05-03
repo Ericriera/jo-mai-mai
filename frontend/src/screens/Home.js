@@ -50,7 +50,7 @@ export default function Home() {
           <Text style={styles.creatorText}>Eric Riera</Text>
         </View>
         <TouchableOpacity
-          onPress={() => openLink("https://links-ericriera.netlify.app/")}
+          onPress={() => openLink("https://links.ericriera.dev")}
         >
           <Ionicons name="link-outline" size={30} color="black" />
         </TouchableOpacity>
