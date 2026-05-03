@@ -1,65 +1,77 @@
-# Jo mai mai
+# Frontend
 
-![App Screenshot](https://github.com/Ericriera/MyPortfolio/blob/main/img/jomaimai.png)
+This folder contains the Expo app for Jo Mai Mai.
 
-This is a fun mobile application built with [Expo](https://expo.dev/) and React Native, based on the popular game "Never Have I Ever". The app is designed to be played in a group setting, encouraging players to share experiences in a lighthearted way. The app is designed to be cross-platform and works on both iOS and Android devices and on [web](https://jomaimai.netlify.app/) (recomended to play on mobile devices). 
+## Requirements
 
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) 20.19+ (LTS)
+- Node.js 20.19+
 - npm
 
-> Note: this project uses the local Expo CLI workflow (`npx expo ...`).
+## Local Setup
 
-### Installation
+Run everything from the `frontend/` directory.
 
-1. Clone the repository:
+1. Install dependencies.
 
-    ```bash
-    git clone https://github.com/yourusername/Jo-mai-mai.git
-    ```
+```zsh
+npm install
+```
 
-2. Navigate to the project directory:
+2. Create your local env file.
 
-    ```bash
-    cd MyExpoApp
-    ```
+```zsh
+cp .env.example .env
+```
 
-3. Install the dependencies:
+3. Start the Expo development server.
 
-    ```bash
-    npm install
-    ```
+```zsh
+npm run start
+```
 
-### Running the App
+## Useful Commands
 
-1. Start the Expo development server with the local CLI bundled in the project:
-
-    ```bash
-    npm run start
-    ```
-
-2. Open the Expo Go app on your mobile device (available on [iOS](https://apps.apple.com/app/apple-store/id982107779) and [Android](https://play.google.com/store/apps/details?id=host.exp.exponent)).
-
-3. Scan the QR code generated in your terminal or web browser to run the app on your device.
-
-Useful commands:
-
-```bash
+```zsh
 npm run android
 npm run ios
 npm run web
 npm run doctor
 ```
 
-### Building the App
+## Expo Go
 
-To build the app for distribution (Android/iOS), run the following command:
+The project uses the local Expo CLI workflow through `npx expo ...`.
 
-```bash
-eas build
+If you test on a physical iPhone, make sure your installed Expo Go version matches the SDK used by the project.
+
+## Environment Variables
+
+Example values live in [.env.example](./.env.example).
+
+Main variable:
+
+- `EXPO_PUBLIC_API_URL`
+
+## Docker
+
+Build the web image from the repository root:
+
+```zsh
+docker build -t jo-mai-mai-web ./frontend
 ```
 
-> **Note:** You will need an Expo account and [Expo Application Services (EAS)](https://docs.expo.dev/eas/) to build the app for production.
+Run it with a frontend env file:
+
+```zsh
+docker run --rm -p 8080:80 --env-file frontend/.env jo-mai-mai-web
+```
+
+At container startup, the image generates runtime web config from the container environment, so `EXPO_PUBLIC_API_URL` can change between deployments without rebuilding the image.
+
+## Web Runtime
+
+The web image is exported with Expo and served by Nginx.
+
+- `nginx.conf` handles SPA routing
+- `entrypoint.sh` generates the runtime `env.js`
+- `src/config/api.js` reads the runtime API base URL
