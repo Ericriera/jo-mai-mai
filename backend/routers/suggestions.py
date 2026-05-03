@@ -4,10 +4,10 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, Response, status
 
-from backend.db.client import get_db_client
-from backend.db.models.suggestion import Suggestion
-from backend.db.repository import FirestoreRepository
-from backend.db.schemas.suggestion import (
+from db.client import get_db_client
+from db.models.suggestion import Suggestion
+from db.repository import FirestoreRepository
+from db.schemas.suggestion import (
     full_suggestion_schema,
     suggestions_schema,
 )

@@ -4,9 +4,9 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.core.config import get_settings
-from backend.db.repository import DocumentNotFoundError
-from backend.routers import questions, suggestions
+from core.config import get_settings
+from db.repository import DocumentNotFoundError
+from routers import questions, suggestions
 
 
 def create_app() -> FastAPI:
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     settings = get_settings()
     uvicorn.run(
-        "backend.main:app",
+        "main:app",
         host=settings.app_host,
         port=settings.app_port,
         reload=settings.app_reload,

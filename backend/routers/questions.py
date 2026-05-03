@@ -5,10 +5,10 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, Query, Response, status
 from google.cloud.firestore_v1.base_query import FieldFilter
 
-from backend.db.client import get_db_client
-from backend.db.models.question import Question
-from backend.db.repository import FirestoreRepository
-from backend.db.schemas.question import full_question_schema, questions_schema
+from db.client import get_db_client
+from db.models.question import Question
+from db.repository import FirestoreRepository
+from db.schemas.question import full_question_schema, questions_schema
 
 router = APIRouter(prefix="/questions", tags=["questions"])
 

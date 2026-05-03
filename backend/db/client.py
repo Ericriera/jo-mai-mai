@@ -5,7 +5,7 @@ from pathlib import Path
 
 from google.cloud import firestore
 
-from backend.core.config import get_settings
+from core.config import get_settings
 
 
 def _build_firestore_client() -> firestore.Client:
